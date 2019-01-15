@@ -1,0 +1,44 @@
+#:kivy 1.1.0
+
+<KivyFileChooserLayout>:
+    id: palm_chooser_layout
+    BoxLayout:
+        id: outer_box
+        size: root.size
+        pos: root.pos
+        orientation: "vertical"
+        FileChooserListView:
+            id: filechooser
+            dirselect: True
+            filters: [root.filter]
+        BoxLayout:
+            id: button_box
+            size_hint: (1.0, 0.7)
+            size_hint_y: None
+            height: 30
+            Button:
+                text: "Add Directory"
+                size_hint_x: (0.6)
+                on_release: directory_grid.add_dir(filechooser.selection)
+            Button:
+                text: "OK"
+                size_hint_x: (0.2)
+                on_release: root.ok()
+            Button:
+                text: "Cancel"
+                size_hint_x: (0.2)
+                on_release: root.cancel()
+        ScrollView:
+            id: palm_chooser_scrollview
+            size_hint: (1.0, 0.3)
+            scroll_x: 0
+            scroll_y: 1
+            scroll_type: ['bars', 'content']
+            bar_width: 10
+            effect_x: None
+            DirectoryGridLayout:
+                id: directory_grid
+                cols: 2
+                size_hint_x: 1
+                size_hint_y: None
+                height: self.minimum_height
