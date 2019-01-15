@@ -15,7 +15,7 @@ class ChooserTest(App):
         self.chooser= KivyFileChooserLayout(ok=self.ok, cancel=self.cancel,
                                             filter=self.is_dir)
         for directory in ['/home']:
-            self.chooser.add_dir(directory)
+            self.chooser.add_entry(directory)
         self.popup = Popup(title="Choose Directories", content=self.chooser)
         self.top_layout.add_widget(self.popup)
         return self.top_layout

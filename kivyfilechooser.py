@@ -19,48 +19,48 @@ DEBUG = True
 class RemoveButton(Button):
     def __init__(self, *args, **kwargs):
         self.associated_label = kwargs.pop("associated_label")
-        self.directory = kwargs.pop("directory")
+        self.entry = kwargs.pop("entry")
         super(RemoveButton, self).__init__(*args, **kwargs)
 
 
-class DirectoryGridLayout(GridLayout):
-    directories = ListProperty([])
+class EntryGridLayout(GridLayout):
+    entries = ListProperty([])
 
     def __init__(self, *args, **kwargs):
-        super(DirectoryGridLayout, self).__init__(*args, **kwargs)
+        super(EntryGridLayout, self).__init__(*args, **kwargs)
 
-    def remove_dir(self, remove_button):
-        self.directories.remove(remove_button.directory)
+    def remove_entry(self, remove_button):
+        self.entries.remove(remove_button.entry)
         self.remove_widget(remove_button.associated_label)
         self.remove_widget(remove_button)
-        print ("Directories now:", self.directories)
+        print ("Entries now:", self.entries)
 
-    def add_dir(self, dir_list):
+    def add_entry(self, entry_list):
         """
 
-        :param dir_list: A list with 1 string element in it (the directory) This
+        :param entry_list: A list with 1 string element in it (the path) This
         is what the kv file supplies to this method, so we must accept the list
         argument.
         :return:
         """
-        directory = dir_list[0]
-        if not directory in self.directories:
-            self.directories.append(directory)
-            directory_label = Label(text=str(directory), halign="left",
+        entry = entry_list[0]
+        if not entry in self.entries:
+            self.entries.append(entry)
+            entry_label = Label(text=str(entry), halign="left",
                                     size_hint_x=0.9, size_hint_y=None, height=20)
-            directory_label.bind(size=directory_label.setter('text_size'))
+            entry_label.bind(size=entry_label.setter('text_size'))
             remove_button = RemoveButton(text="X", size_hint_x=0.1, size_hint_y=None,
-                                        height=20, associated_label=directory_label,
-                                        directory=directory)
-            remove_button.bind(on_release=self.remove_dir)
+                                        height=20, associated_label=entry_label,
+                                        entry=entry)
+            remove_button.bind(on_release=self.remove_entry)
             self.add_widget(remove_button)
-            self.add_widget(directory_label)
+            self.add_widget(entry_label)
         else:
-            debug.print ("Directory", directory, "already in the list")
-        debug.print ("Directories: ", self.directories, type(self.directories))
+            debug.print ("entry", entry, "already in the list")
+        debug.print ("entries: ", self.entries, type(self.entries))
 
-    def on_directories(self, *args):
-        debug.print ("self.directories: ", self.directories, " ARGS: ", *args)
+    def on_entries(self, *args):
+        debug.print ("self.entries: ", self.entries, " ARGS: ", *args)
 
 
 class KivyFileChooserLayout(FloatLayout):
@@ -69,26 +69,26 @@ class KivyFileChooserLayout(FloatLayout):
 
         self.chooser= KivyFileChooserLayout(ok=self.ok, cancel=self.cancel)
         for directory in ['/home/my_login/stuff']:
-            self.chooser.add_dir(directory)
-        self.popup = Popup(title="Choose Directories", content=self.chooser)
+            self.chooser.add_entry(directory)
+        self.popup = Popup(title="Choose entries", content=self.chooser)
         self.top_layout.add_widget(self.popup)
     """
     loadfile = ObjectProperty(None)
     txt_inpt = ObjectProperty(None)
 
-    initial_dirs = ListProperty([])
+    initial_entries = ListProperty([])
 
     def __init__(self, *args, **kwargs):
-        self.chosen_dirs = ListProperty([])
+        self.chosen_entries = ListProperty([])
         self.ok_method = kwargs.pop("ok", None)
         self.cancel_method = kwargs.pop("cancel", None)
         self._filter = kwargs.pop("filter", self.filter)
         super(KivyFileChooserLayout, self).__init__(*args, **kwargs)
 
-    def filter(self, directory, filename):
+    def filter(self, entry, filename):
         """
 
-        :param directory: As specified at https://kivy.org/doc/stable/api-kivy.uix.filechooser.html,
+        :param entry: As specified at https://kivy.org/doc/stable/api-kivy.uix.filechooser.html,
         it is the first argument to your filter.
         :param filename: Likewise, this is the second argument.
         :return:
@@ -96,21 +96,21 @@ class KivyFileChooserLayout(FloatLayout):
         pass
 
     def cancel(self):
-        grid = self.ids["directory_grid"]
+        grid = self.ids["entry_grid"]
         if self.cancel_method is not None:
-            self.cancel_method(grid.directories)
+            self.cancel_method(grid.entries)
 
     def ok(self):
-        grid = self.ids["directory_grid"]
+        grid = self.ids["entry_grid"]
         if self.ok_method is not None:
-            self.ok_method(grid.directories)
+            self.ok_method(grid.entries)
 
-    def add_dir(self, directory):
+    def add_entry(self, entry):
         """
 
-        :param directory: String which is a path to a directory.
+        :param entry: String which is a path to a entry.
         :return:
         """
-        grid = self.ids["directory_grid"]
+        grid = self.ids["entry_grid"]
         # This must be a list because the kv file supplies a list to this method.
-        grid.add_dir([directory])
+        grid.add_entry([entry])

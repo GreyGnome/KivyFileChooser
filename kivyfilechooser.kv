@@ -17,9 +17,9 @@
             size_hint_y: None
             height: 30
             Button:
-                text: "Add Directory"
+                text: "Add Entry"
                 size_hint_x: (0.6)
-                on_release: directory_grid.add_dir(filechooser.selection)
+                on_release: entry_grid.add_entry(filechooser.selection)
             Button:
                 text: "OK"
                 size_hint_x: (0.2)
@@ -36,8 +36,8 @@
             scroll_type: ['bars', 'content']
             bar_width: 10
             effect_x: None
-            DirectoryGridLayout:
-                id: directory_grid
+            EntryGridLayout:
+                id: entry_grid
                 cols: 2
                 size_hint_x: 1
                 size_hint_y: None
