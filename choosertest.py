@@ -9,14 +9,18 @@ from kivyfilechooser import KivyFileChooserLayout
 
 class ChooserTest(App):
     def build(self):
+        # This is our application
         self.top_layout = FloatLayout()
         self.msg_label= Label(text="LABEL")
         self.top_layout.add_widget(self.msg_label)
+
+        # OH! We want a directory chooser! Let's add a chooser in a Popup...
         self.chooser= KivyFileChooserLayout(ok=self.ok, cancel=self.cancel,
                                             filter=self.is_dir)
         for directory in ['/home']:
             self.chooser.add_entry(directory)
         self.popup = Popup(title="Choose Directories", content=self.chooser)
+        # Add the Popup
         self.top_layout.add_widget(self.popup)
         return self.top_layout
 

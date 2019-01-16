@@ -43,6 +43,8 @@ class EntryGridLayout(GridLayout):
         argument.
         :return:
         """
+        if len(entry_list) == 0:
+            return
         entry = entry_list[0]
         if not entry in self.entries:
             self.entries.append(entry)
